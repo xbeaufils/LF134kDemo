@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    
+    <string name="app_name">LF134kDemo(HDX+FDX-B)</string>
+    <string name="id">ID</string>
+	<string name="count">Count</string>
+	<string name="clear">Clear</string>
+	<string name="exit">Exit</string>
+	<string name="start">Start</string>
+	<string name="stop">Stop</string>
+	<string name="num">Num</string>
+	<string name="country">Country</string>
+	<string name="type">Type</string>
+	<string name="action_settings">Settings</string>
+</resources>
