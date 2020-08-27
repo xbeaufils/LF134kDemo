@@ -1,11 +1,14 @@
 package com.handheld.LF134K;
 
+import android.util.Log;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 
 import cn.pda.serialport.SerialPort;
 import cn.pda.serialport.Tools;
+import io.sentry.core.Sentry;
 
 public class Lf134KManager {
 	public static int Port = 12; //
@@ -14,6 +17,7 @@ public class Lf134KManager {
 	private static SerialPort mSerialPort;//
 	private static InputStream mInputStream;
 	public static int LF = 1004;
+	private String TAG =  "Lf134KManager";
 	/**
 	 * open device
 	 */
@@ -41,10 +45,12 @@ public class Lf134KManager {
 			mSerialPort.rfid_poweron();
 			mInputStream = mSerialPort.getInputStream();
 		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
+			Sentry.captureException(e);
+			Log.e(TAG, "Lf134KManager: ",e);
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			Sentry.captureException(e);
+			Log.e(TAG, "Lf134KManager: ",e);
 			e.printStackTrace();
 		}
 	}
@@ -53,7 +59,8 @@ public class Lf134KManager {
 		try {
 			mInputStream.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			Sentry.captureException(e);
+			Log.e(TAG, "Lf134KManager: ",e);
 			e.printStackTrace();
 			return false;
 		}
@@ -88,7 +95,8 @@ public class Lf134KManager {
 				mInputStream.read(new byte[4906]);
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			Sentry.captureException(e);
+			Log.e(TAG, "Lf134KManager: ",e);
 			e.printStackTrace();
 		}
 	}
@@ -108,6 +116,8 @@ public class Lf134KManager {
 					break;
 				}
 			} catch (IOException e1) {
+				Sentry.captureException(e1);
+				Log.e(TAG, "Lf134KManager: ",e1);
 				e1.printStackTrace();
 			}
 		}
@@ -151,12 +161,13 @@ public class Lf134KManager {
 		}
 		
 		try {
-			model.ID = Tools.HexString2Bytes(new String(model.ID,"ASC-II"));
-			model.Country = Tools.HexString2Bytes(new String(model.Country,"ASC-II"));
-			model.Reserved = Tools.HexString2Bytes(new String(model.Reserved,"ASC-II"));
-			model.Extend = Tools.HexString2Bytes(new String(model.Extend,"ASC-II"));
+			model.ID = Tools.HexString2Bytes(new String(model.ID,"US-ASCII"));
+			model.Country = Tools.HexString2Bytes(new String(model.Country,"US-ASCII"));
+			model.Reserved = Tools.HexString2Bytes(new String(model.Reserved,"US-ASCII"));
+			model.Extend = Tools.HexString2Bytes(new String(model.Extend,"US-ASCII"));
 		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
+			Sentry.captureException(e);
+			Log.e(TAG, "Lf134KManager: ",e);
 			e.printStackTrace();
 		}
 		if (buffer[29] == 0x03) {
